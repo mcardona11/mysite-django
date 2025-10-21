@@ -1,0 +1,17 @@
+# Entorn virtual
+venv/
+# Base de dades
+*.sqlite3
+# Fitxers python compilats
+__pycache__/
+*.py[cod]
+# Editor / IDE
+.vscode/
+.idea/
+# Descàrregues i fitxers pesats
+Baixades/
+BurpSuitePro/
+Vídeos/
+.cache/
+# Sistema
+.DS_Store
