@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
@@ -37,11 +36,16 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.NAME, "password").send_keys("pirineus")
         self.selenium.find_element(By.XPATH, "//input[@value='Log in']").click()
 
-        # Esperar que aparegui el botó "View site" abans de clicar-lo
-        view_site = WebDriverWait(self.selenium, 10).until(
+        # Esperar que la pàgina d'admin carregui correctament
+        WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.LINK_TEXT, "View site"))
         )
-        view_site.click()  # Selenium comprova que la pàgina s'obre (HTTP 200 implícit)
+
+        # Comprovar que existeix el botó "View site" i clicar
+        view_site = WebDriverWait(self.selenium, 15).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "View site"))
+        )
+        view_site.click()
 
         # Tornar a admin per crear una Question
         self.selenium.get(f'{self.live_server_url}/admin/polls/question/add/')
@@ -56,3 +60,6 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.NAME, "choice_text").send_keys("Poma")
         self.selenium.find_element(By.NAME, "votes").send_keys("0")
         self.selenium.find_element(By.NAME, "_save").click()
+
+
+
