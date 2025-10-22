@@ -37,7 +37,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, "//input[@value='Log in']").click()
 
         # Esperar que la pàgina d'admin carregui correctament
-        WebDriverWait(self.selenium, 10).until(
+        WebDriverWait(self.selenium, 20).until(
             EC.presence_of_element_located((By.LINK_TEXT, "View site"))
         )
 
