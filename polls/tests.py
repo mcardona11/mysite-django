@@ -1,10 +1,10 @@
 from django.test import TestCase
-
-# Create your tests here.
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from django.contrib.auth.models import User
 
 class PollsSeleniumTests(StaticLiveServerTestCase):
@@ -37,8 +37,10 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.NAME, "password").send_keys("pirineus")
         self.selenium.find_element(By.XPATH, "//input[@value='Log in']").click()
 
-        # Comprovar que existeix el botó "View site" i clicar
-        view_site = self.selenium.find_element(By.LINK_TEXT, "View site")
+        # Esperar que aparegui el botó "View site" abans de clicar-lo
+        view_site = WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.LINK_TEXT, "View site"))
+        )
         view_site.click()  # Selenium comprova que la pàgina s'obre (HTTP 200 implícit)
 
         # Tornar a admin per crear una Question
@@ -49,7 +51,6 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
 
         # Afegir una Choice a la Question creada
         self.selenium.get(f'{self.live_server_url}/admin/polls/choice/add/')
-        # Selenium no pot seleccionar directament el select, així que fem click i text
         question_field = self.selenium.find_element(By.NAME, "question")
         question_field.send_keys("Quina és la teva fruita preferida?")
         self.selenium.find_element(By.NAME, "choice_text").send_keys("Poma")
