@@ -36,7 +36,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         self.selenium.find_element(By.XPATH, "//input[@value='Log in']").click()
 
         # Clicar al botó "View site"
-        self.selenium.find_element(By.LINK_TEXT, "View site").click()
+	self.selenium.find_element(By.XPATH, "//a[text()='View site']").click()
 
         # Tornar a admin per crear una Question
         self.selenium.get(f'{self.live_server_url}/admin/polls/question/add/')
