@@ -8,7 +8,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Configuració del navegador en mode headless
+        # headless
         opts = Options()
         opts.add_argument("--headless")
         opts.add_argument("--no-sandbox")
@@ -16,7 +16,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         cls.selenium = WebDriver(options=opts)
         cls.selenium.implicitly_wait(5)
 
-        # Crear superusuari per al test
+        # superusuari
         user = User.objects.create_user("isard", "isard@isardvdi.com", "pirineus")
         user.is_superuser = True
         user.is_staff = True
@@ -28,26 +28,26 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_view_site_and_create_question(self):
-        # Entrar a l'admin
+        # Entrar amb admin
         self.selenium.get(f'{self.live_server_url}/admin/')
         self.selenium.find_element(By.NAME, "username").send_keys("isard")
         self.selenium.find_element(By.NAME, "password").send_keys("pirineus")
         self.selenium.find_element(By.XPATH, "//input[@value='Log in']").click()
 
-        # Comprovar que existeix el botó "View site" i clicar
+        # Mirar si view site existeix i clicar-ho
         self.selenium.find_element(By.XPATH, "//a[text()='View site']").click()
 
-        # Tornar a admin per crear una Question
+        # Torna a admin per crear una question
         self.selenium.get(f'{self.live_server_url}/admin/polls/question/add/')
         self.selenium.find_element(By.NAME, "question_text").send_keys("Quina és la teva fruita preferida?")
 
-        # Omplir la data i hora correctament
+        # data i hora
         self.selenium.find_element(By.NAME, "pub_date_0").send_keys("2025-10-20")
         self.selenium.find_element(By.NAME, "pub_date_1").send_keys("17:00:00")
 
         self.selenium.find_element(By.NAME, "_save").click()
 
-        # Afegir una Choice a la Question creada
+        # Afegir una choice a la question
         self.selenium.get(f'{self.live_server_url}/admin/polls/choice/add/')
         question_field = self.selenium.find_element(By.NAME, "question")
         question_field.send_keys("Quina és la teva fruita preferida?")
