@@ -39,7 +39,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
 
         # Torna a admin per crear una question
         self.selenium.get(f'{self.live_server_url}/admin/polls/question/add/')
-        self.selenium.find_element(By.NAME, "question_text").send_keys("Quina és la teva fruita preferida?")
+        self.selenium.find_element(By.NAME, "question_text").send_keys("Barça o madrid?")
 
         # data i hora
         self.selenium.find_element(By.NAME, "pub_date_0").send_keys("2025-10-20")
@@ -50,7 +50,7 @@ class PollsSeleniumTests(StaticLiveServerTestCase):
         # Afegir una choice a la question
         self.selenium.get(f'{self.live_server_url}/admin/polls/choice/add/')
         question_field = self.selenium.find_element(By.NAME, "question")
-        question_field.send_keys("Quina és la teva fruita preferida?")
-        self.selenium.find_element(By.NAME, "choice_text").send_keys("Poma")
+        question_field.send_keys("Barça o madrid")
+        self.selenium.find_element(By.NAME, "choice_text").send_keys("Barça")
         self.selenium.find_element(By.NAME, "votes").send_keys("0")
         self.selenium.find_element(By.NAME, "_save").click()
